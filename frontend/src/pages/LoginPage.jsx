@@ -59,6 +59,14 @@ export default function LoginPage() {
         <span className="font-semibold text-ink">Use the demo profile</span>
         <span className="mt-0.5 block text-muted">demo@corebank.app · Demo@1234 · PIN 2580</span>
       </button>
+      <button
+        type="button"
+        className="mt-2 w-full rounded-xl border border-dashed border-line px-4 py-3 text-left text-sm hover:bg-white"
+        onClick={() => { setEmail("admin@corebank.app"); setPassword("Admin@1234"); }}
+      >
+        <span className="font-semibold text-ink">Use the admin profile</span>
+        <span className="mt-0.5 block text-muted">admin@corebank.app · Admin@1234</span>
+      </button>
       <p className="mt-6 text-sm text-muted">
         New to CoreBank? <Link to="/register" className="font-semibold text-ink">Create an account</Link>
       </p>
