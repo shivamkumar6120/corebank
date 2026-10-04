@@ -42,7 +42,7 @@ export default function OtpPage() {
     try {
       const { data } = await api.post("/auth/verify-otp", { email: state.email, otp, purpose: state.purpose });
       establish(data.token, data.user);
-      navigate("/", { replace: true });
+      navigate(data.user?.admin ? "/admin" : "/", { replace: true });
     } catch (err) {
       setError(errorMessage(err, "Incorrect verification code"));
     } finally {
