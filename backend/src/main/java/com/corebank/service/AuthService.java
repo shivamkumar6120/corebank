@@ -161,6 +161,7 @@ public class AuthService {
             user.setDateOfBirth(pending.dateOfBirth());
             user.setAddress(pending.address());
             user.setEnabled(true);
+            user.setAdmin(false);
             user.setCreatedAt(LocalDateTime.now());
             user = userRepository.save(user);
             accountService.open(user, AccountType.SAVINGS);
