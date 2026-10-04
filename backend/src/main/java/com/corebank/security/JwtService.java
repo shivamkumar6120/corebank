@@ -25,6 +25,7 @@ public class JwtService {
         return Jwts.builder()
                 .subject(String.valueOf(user.getId()))
                 .claim("email", user.getEmail())
+                .claim("admin", user.isAdmin())
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + props.getJwtExpirationMs()))
                 .signWith(key())
@@ -39,6 +40,16 @@ public class JwtService {
                 .getPayload()
                 .getSubject();
         return Long.valueOf(subject);
+    }
+
+    public boolean adminClaim(String token) {
+        Object claim = Jwts.parser()
+                .verifyWith(key())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("admin");
+        return Boolean.TRUE.equals(claim);
     }
 
     public boolean valid(String token) {
