@@ -35,6 +35,13 @@ Digital banking and fund transfer portal for an MCA minor project. The interface
 
 Priya Nair is already saved as a beneficiary, so an “other account” transfer can credit a real second customer inside the database.
 
+An admin signs in on the same screen and lands on `/admin`.
+
+| | |
+|---|---|
+| Email | `admin@corebank.app` |
+| Password | `Admin@1234` |
+
 New registrations start at ₹0 and receive both a Savings and a Current account after OTP verification.
 
 ## Run it locally
