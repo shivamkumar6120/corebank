@@ -20,7 +20,8 @@ public final class Mappers {
                 user.getAddress(),
                 user.getDateOfBirth(),
                 user.getTransactionPinHash() != null,
-                user.getCreatedAt()
+                user.getCreatedAt(),
+                user.isAdmin()
         );
     }
 
