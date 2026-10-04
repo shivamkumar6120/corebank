@@ -50,6 +50,9 @@ public class User {
     @Column(nullable = false)
     private boolean enabled = true;
 
+    @Column(name = "is_admin", nullable = false)
+    private boolean admin = false;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
