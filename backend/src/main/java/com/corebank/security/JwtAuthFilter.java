@@ -38,8 +38,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 try {
                     Long userId = jwtService.userId(token);
                     userRepository.findById(userId).filter(User::isEnabled).ifPresent(user -> {
+                        boolean admin = user.isAdmin() && jwtService.adminClaim(token);
+                        String role = admin ? "ROLE_ADMIN" : "ROLE_USER";
                         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                                user, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+                                user, null, List.of(new SimpleGrantedAuthority(role)));
                         auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(auth);
                     });
