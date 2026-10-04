@@ -20,7 +20,8 @@ public final class Responses {
             String address,
             LocalDate dateOfBirth,
             boolean hasPin,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            boolean admin
     ) {
     }
 
@@ -136,5 +137,33 @@ public final class Responses {
     }
 
     public record UnreadCount(long count) {
+    }
+
+    public record AdminAccount(String accountNumber, String accountType, BigDecimal balance) {
+    }
+
+    public record AdminUser(Long id, String fullName, String email, List<AdminAccount> accounts) {
+    }
+
+    public record AdminTransaction(
+            Long id,
+            String customerName,
+            String email,
+            String accountNumber,
+            String type,
+            String direction,
+            BigDecimal amount,
+            String description,
+            String referenceNumber,
+            LocalDateTime createdAt
+    ) {
+    }
+
+    public record AdminStats(
+            long totalUsers,
+            long totalAccounts,
+            BigDecimal transactionVolume,
+            List<AdminTransaction> recent
+    ) {
     }
 }
