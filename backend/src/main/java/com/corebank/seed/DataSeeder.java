@@ -56,10 +56,12 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (userRepository.count() > 0) {
-            return;
-        }
-        transactionTemplate.executeWithoutResult(status -> seed());
+        transactionTemplate.executeWithoutResult(status -> {
+            if (userRepository.count() == 0) {
+                seed();
+            }
+            ensureAdmin();
+        });
     }
 
     private void seed() {
@@ -129,8 +131,26 @@ public class DataSeeder implements CommandLineRunner {
         user.setPasswordHash(passwordEncoder.encode("Demo@1234"));
         user.setTransactionPinHash(passwordEncoder.encode(pin));
         user.setEnabled(true);
+        user.setAdmin(false);
         user.setCreatedAt(at(21, 9, 0));
         return userRepository.save(user);
+    }
+
+    private void ensureAdmin() {
+        if (userRepository.existsByEmail("admin@corebank.app")) {
+            return;
+        }
+        User admin = new User();
+        admin.setFullName("CoreBank Admin");
+        admin.setEmail("admin@corebank.app");
+        admin.setPhone("9000000001");
+        admin.setAddress("CoreBank Operations");
+        admin.setPasswordHash(passwordEncoder.encode("Admin@1234"));
+        admin.setEnabled(true);
+        admin.setAdmin(true);
+        admin.setCreatedAt(LocalDateTime.now());
+        userRepository.save(admin);
+        log.info("Seeded admin login admin@corebank.app / Admin@1234");
     }
 
     private void post(Account account, TransactionType type, String amount, String description, String counterparty, String counterpartyAccount, String category, LocalDateTime when) {
