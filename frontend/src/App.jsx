@@ -1,6 +1,7 @@
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import AppShell from "./components/AppShell";
+import AdminShell from "./components/AdminShell";
 import { Splash } from "./components/ui";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -16,11 +17,18 @@ import MoneyPage from "./pages/MoneyPage";
 import BillsPage from "./pages/BillsPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotificationsPage from "./pages/NotificationsPage";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
+import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminTransactionsPage from "./pages/admin/AdminTransactionsPage";
+
+function homeFor(user) {
+  return user?.admin ? "/admin" : "/";
+}
 
 function GuestOnly() {
   const { user, ready } = useAuth();
   if (!ready) return <Splash />;
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to={homeFor(user)} replace />;
   return <Outlet />;
 }
 
@@ -28,7 +36,16 @@ function RequireAuth() {
   const { user, ready } = useAuth();
   if (!ready) return <Splash />;
   if (!user) return <Navigate to="/login" replace />;
+  if (user.admin) return <Navigate to="/admin" replace />;
   return <AppShell />;
+}
+
+function RequireAdmin() {
+  const { user, ready } = useAuth();
+  if (!ready) return <Splash />;
+  if (!user) return <Navigate to="/login" replace />;
+  if (!user.admin) return <Navigate to="/" replace />;
+  return <AdminShell />;
 }
 
 export default function App() {
@@ -52,6 +69,11 @@ export default function App() {
         <Route path="/bills" element={<BillsPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/notifications" element={<NotificationsPage />} />
+      </Route>
+      <Route element={<RequireAdmin />}>
+        <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route path="/admin/users" element={<AdminUsersPage />} />
+        <Route path="/admin/transactions" element={<AdminTransactionsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
