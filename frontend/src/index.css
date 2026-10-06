@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    @apply bg-ice text-ink antialiased;
+  }
+
+  ::selection {
+    background: #d9e6ff;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line bg-white shadow-card motion-safe:transition motion-safe:duration-200 motion-safe:ease-out motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.01] motion-safe:hover:shadow-lift;
+  }
+
+  .field {
+    @apply h-12 w-full rounded-xl border border-line bg-white px-3.5 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10;
+  }
+
+  .label {
+    @apply mb-1.5 block text-[13px] font-medium text-navy-800;
+  }
+
+  .error-text {
+    @apply mt-1.5 block text-xs text-rose-600;
+  }
+}
+
+.money {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.auth-panel {
+  background:
+    radial-gradient(900px 480px at 0% 0%, rgba(47, 107, 255, 0.48), transparent 55%),
+    radial-gradient(680px 420px at 100% 100%, rgba(20, 184, 166, 0.22), transparent 52%),
+    #071426;
+}
+
+.auth-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+.hero-card {
+  background:
+    radial-gradient(520px 240px at 100% 0%, rgba(47, 107, 255, 0.55), transparent 58%),
+    linear-gradient(145deg, #071426 0%, #12305c 64%, #1d4ed8 145%);
+}
+
+.check-pop {
+  animation: pop 0.35s ease-out;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
