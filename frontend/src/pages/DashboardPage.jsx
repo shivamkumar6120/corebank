@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { ArrowDownToLine, ArrowLeftRight, ArrowUpFromLine, Eye, EyeOff, Receipt, FileText } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 import api from "../api/client";
+import CountUp from "../components/CountUp";
 import TxnRow from "../components/TxnRow";
 import { EmptyState, Skeleton } from "../components/ui";
 import { accountTitle, formatINR, greeting, maskAccount } from "../lib/format";
+import { riseVariants, staggerVariants, useMotionSafe } from "../lib/motion";
 
 const actions = [
   { to: "/transfer", label: "Transfer", icon: ArrowLeftRight },
@@ -16,6 +19,8 @@ const actions = [
 ];
 
 export default function DashboardPage() {
+  const reduce = useMotionSafe();
+  const rise = riseVariants(reduce);
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [selected, setSelected] = useState(null);
@@ -56,11 +61,16 @@ export default function DashboardPage() {
         <p className="mt-1 text-sm text-muted">Here is a clear view of your money today.</p>
       </div>
 
-      <section className="hero-card relative overflow-hidden rounded-3xl p-6 text-white md:p-8">
+      <motion.section
+        className="hero-card relative overflow-hidden rounded-3xl p-6 text-white md:p-8"
+        variants={rise}
+        initial="hidden"
+        animate="show"
+      >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-sm text-blue-100">Available balance</p>
-            <p className="money mt-2 text-4xl font-semibold tracking-tight md:text-5xl">{formatINR(account?.balance, hidden)}</p>
+            <p className="money mt-2 text-4xl font-semibold tracking-tight md:text-5xl"><CountUp value={account?.balance} hidden={hidden} /></p>
             <p className="mt-2 text-sm text-blue-100">
               {accountTitle(account)} {account ? maskAccount(account.accountNumber) : ""} · Total {formatINR(data.totalBalance, hidden)}
             </p>
@@ -80,18 +90,25 @@ export default function DashboardPage() {
             </button>
           ))}
         </div>
-      </section>
+      </motion.section>
 
-      <section className="grid grid-cols-3 gap-3 sm:grid-cols-5">
+      <motion.section
+        className="grid grid-cols-3 gap-3 sm:grid-cols-5"
+        variants={staggerVariants(reduce, 0.08)}
+        initial="hidden"
+        animate="show"
+      >
         {actions.map((action) => (
-          <Link key={action.to} to={action.to} className="group flex flex-col items-center gap-2">
-            <span className="grid h-12 w-12 place-items-center rounded-2xl border border-line bg-white text-navy-800 shadow-card transition group-hover:-translate-y-0.5 group-hover:border-brand-500/30">
-              <action.icon size={18} />
-            </span>
-            <span className="text-xs font-medium text-muted">{action.label}</span>
-          </Link>
+          <motion.div key={action.to} variants={rise}>
+            <Link to={action.to} className="group flex flex-col items-center gap-2">
+              <span className="grid h-12 w-12 place-items-center rounded-2xl border border-line bg-white text-navy-800 shadow-card transition duration-200 ease-out group-hover:-translate-y-0.5 group-hover:scale-[1.02] group-hover:border-brand-500/30 group-hover:shadow-lift motion-reduce:transform-none">
+                <action.icon size={18} />
+              </span>
+              <span className="text-xs font-medium text-muted">{action.label}</span>
+            </Link>
+          </motion.div>
         ))}
-      </section>
+      </motion.section>
 
       <section className="grid gap-4 lg:grid-cols-5">
         <div className="card p-5 lg:col-span-3">
@@ -114,8 +131,8 @@ export default function DashboardPage() {
                   cursor={{ fill: "rgba(47,107,255,0.06)" }}
                   formatter={(value, name) => [formatINR(value), name === "moneyIn" ? "In" : "Out"]}
                 />
-                <Bar dataKey="moneyIn" fill="#14B8A6" radius={[6, 6, 0, 0]} />
-                <Bar dataKey="moneyOut" fill="#102444" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="moneyIn" fill="#14B8A6" radius={[6, 6, 0, 0]} isAnimationActive={!reduce} animationDuration={700} animationEasing="ease-out" />
+                <Bar dataKey="moneyOut" fill="#102444" radius={[6, 6, 0, 0]} isAnimationActive={!reduce} animationDuration={700} animationEasing="ease-out" />
               </BarChart>
             </ResponsiveContainer>
           </div>

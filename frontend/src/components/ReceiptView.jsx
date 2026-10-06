@@ -1,14 +1,33 @@
 import { Link } from "react-router-dom";
-import { Check } from "lucide-react";
+import { motion } from "framer-motion";
 import { formatDate, formatINR, maskAccount } from "../lib/format";
+import { EASE, useMotionSafe } from "../lib/motion";
 import { Button } from "./ui";
 
 export default function ReceiptView({ title, subtitle, amount, rows, onDone, secondary }) {
+  const reduce = useMotionSafe();
   return (
-    <div className="mx-auto max-w-lg">
+    <motion.div
+      className="mx-auto max-w-lg"
+      initial={reduce ? false : { opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: reduce ? 0 : 0.35, ease: EASE }}
+    >
       <div className="card px-6 py-8 sm:px-8">
-        <div className="check-pop mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-50 text-emerald-600">
-          <Check size={30} strokeWidth={2.4} />
+        <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-50 text-emerald-600">
+          <svg viewBox="0 0 32 32" className="h-8 w-8" aria-hidden="true">
+            <motion.path
+              d="M7 16.5 13 22.5 25 10"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              initial={reduce ? false : { pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: reduce ? 0 : 0.45, ease: EASE }}
+            />
+          </svg>
         </div>
         <h1 className="mt-5 text-center text-xl font-semibold tracking-tight">{title}</h1>
         {subtitle && <p className="mt-1 text-center text-sm text-muted">{subtitle}</p>}
@@ -30,7 +49,7 @@ export default function ReceiptView({ title, subtitle, amount, rows, onDone, sec
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

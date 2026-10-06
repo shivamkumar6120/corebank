@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api, { errorMessage } from "../../api/client";
+import MotionRow from "../../components/MotionRow";
 import { EmptyState, PageHeader, Skeleton } from "../../components/ui";
 import { accountTitle, formatINR } from "../../lib/format";
 
@@ -34,8 +35,8 @@ export default function AdminUsersPage() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user.id} className="border-t border-line align-top">
+              {users.map((user, index) => (
+                <MotionRow key={user.id} index={index} className="border-t border-line align-top">
                   <td className="px-5 py-4 font-medium">{user.fullName}</td>
                   <td className="px-5 py-4 text-muted">{user.email}</td>
                   <td className="px-5 py-4">
@@ -55,7 +56,7 @@ export default function AdminUsersPage() {
                       <p key={account.accountNumber}>{formatINR(account.balance)}</p>
                     ))}
                   </td>
-                </tr>
+                </MotionRow>
               ))}
             </tbody>
           </table>

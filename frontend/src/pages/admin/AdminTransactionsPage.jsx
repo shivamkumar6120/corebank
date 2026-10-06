@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import api, { errorMessage } from "../../api/client";
+import MotionRow from "../../components/MotionRow";
 import { Button, EmptyState, PageHeader, SelectInput, TextInput } from "../../components/ui";
 import { formatDate, formatINR, TYPE_LABELS } from "../../lib/format";
 
@@ -63,9 +64,9 @@ export default function AdminTransactionsPage() {
                 <th className="px-5 py-3 text-right font-medium">Amount</th>
               </tr>
             </thead>
-            <tbody>
-              {result.content.map((txn) => (
-                <tr key={txn.id} className="border-t border-line">
+            <tbody key={`${result.page}-${result.content.map((txn) => txn.id).join("-")}`}>
+              {result.content.map((txn, index) => (
+                <MotionRow key={txn.id} index={index} className="border-t border-line">
                   <td className="whitespace-nowrap px-5 py-3 text-muted">{formatDate(txn.createdAt)}</td>
                   <td className="px-5 py-3">
                     <p className="font-medium">{txn.customerName}</p>
@@ -77,7 +78,7 @@ export default function AdminTransactionsPage() {
                   <td className={`money px-5 py-3 text-right font-semibold ${txn.direction === "CREDIT" ? "text-emerald-600" : "text-ink"}`}>
                     {txn.direction === "CREDIT" ? "+" : "−"}{formatINR(txn.amount)}
                   </td>
-                </tr>
+                </MotionRow>
               ))}
             </tbody>
           </table>

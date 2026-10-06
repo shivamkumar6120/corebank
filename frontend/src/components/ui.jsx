@@ -11,7 +11,7 @@ export function Button({ children, variant = "primary", loading = false, classNa
   return (
     <button
       className={cn(
-        "inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60",
+        "inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition duration-200 ease-out motion-safe:hover:scale-[1.02] motion-safe:hover:shadow-lift motion-safe:active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100 disabled:hover:shadow-none",
         variants[variant],
         className
       )}

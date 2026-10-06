@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Landmark, Receipt, Users } from "lucide-react";
 import api, { errorMessage } from "../../api/client";
+import MotionRow from "../../components/MotionRow";
 import { EmptyState, PageHeader, Skeleton } from "../../components/ui";
 import { formatDate, formatINR, TYPE_LABELS } from "../../lib/format";
 
@@ -69,8 +70,8 @@ export default function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {data.recent.map((txn) => (
-                  <tr key={txn.id} className="border-t border-line">
+                {data.recent.map((txn, index) => (
+                  <MotionRow key={txn.id} index={index} className="border-t border-line">
                     <td className="whitespace-nowrap px-5 py-3 text-muted">{formatDate(txn.createdAt)}</td>
                     <td className="px-5 py-3">
                       <p className="font-medium">{txn.customerName}</p>
@@ -82,7 +83,7 @@ export default function AdminDashboardPage() {
                     <td className={`money px-5 py-3 text-right font-semibold ${txn.direction === "CREDIT" ? "text-emerald-600" : "text-ink"}`}>
                       {txn.direction === "CREDIT" ? "+" : "−"}{formatINR(txn.amount)}
                     </td>
-                  </tr>
+                  </MotionRow>
                 ))}
               </tbody>
             </table>

@@ -1,5 +1,6 @@
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import PageFade from "./components/PageFade";
 import AppShell from "./components/AppShell";
 import AdminShell from "./components/AdminShell";
 import { Splash } from "./components/ui";
@@ -29,7 +30,11 @@ function GuestOnly() {
   const { user, ready } = useAuth();
   if (!ready) return <Splash />;
   if (user) return <Navigate to={homeFor(user)} replace />;
-  return <Outlet />;
+  return (
+    <PageFade slide={16}>
+      <Outlet />
+    </PageFade>
+  );
 }
 
 function RequireAuth() {

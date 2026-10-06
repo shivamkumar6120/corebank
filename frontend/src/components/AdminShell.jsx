@@ -4,6 +4,8 @@ import { LayoutDashboard, List, LogOut, Menu, Shield, Users, X } from "lucide-re
 import { useAuth } from "../context/AuthContext";
 import { cn, initials } from "../lib/format";
 import Logo from "./Logo";
+import NavHighlight from "./NavHighlight";
+import PageFade from "./PageFade";
 
 const NAV = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -40,12 +42,17 @@ export default function AdminShell() {
               to={item.to}
               end={item.end}
               className={({ isActive }) => cn(
-                "flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition",
-                isActive ? "bg-white/10 text-white" : "text-slate-300 hover:bg-white/5 hover:text-white"
+                "relative flex h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium",
+                isActive ? "text-white" : "text-slate-300 hover:bg-white/5 hover:text-white"
               )}
             >
-              <item.icon size={18} />
-              {item.label}
+              {({ isActive }) => (
+                <>
+                  <NavHighlight active={isActive} layoutId="admin-nav" />
+                  <item.icon size={18} className="relative" />
+                  <span className="relative">{item.label}</span>
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
@@ -74,7 +81,9 @@ export default function AdminShell() {
           <p className="text-sm font-medium text-muted">Oversight</p>
         </header>
         <main className="mx-auto max-w-6xl px-4 py-6 md:px-8 md:py-8">
-          <Outlet />
+          <PageFade>
+            <Outlet />
+          </PageFade>
         </main>
       </div>
     </div>
